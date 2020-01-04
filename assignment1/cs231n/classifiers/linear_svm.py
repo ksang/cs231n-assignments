@@ -33,8 +33,11 @@ def svm_loss_naive(W, X, y, reg):
       if j == y[i]:
         continue
       margin = scores[j] - correct_class_score + 1 # note delta = 1
+      # margin > 0 indicates misclassification
       if margin > 0:
         loss += margin
+        dW[:, j] += X[i]
+        dW[:, y[i]] += -X[i]
 
   # Right now the loss is a sum over all training examples, but we want it
   # to be an average instead so we divide by num_train.
@@ -42,6 +45,11 @@ def svm_loss_naive(W, X, y, reg):
 
   # Add regularization to the loss.
   loss += reg * np.sum(W * W)
+
+  # Average gradients over examples.
+  dW /= num_train
+  # Add regularization graidents
+  dW += 2 * reg * W
 
   #############################################################################
   # TODO:                                                                     #
@@ -70,7 +78,18 @@ def svm_loss_vectorized(W, X, y, reg):
   # Implement a vectorized version of the structured SVM loss, storing the    #
   # result in loss.                                                           #
   #############################################################################
-  pass
+  num_train = X.shape[0]
+  # scores: (N, D) dot (D, C) = (N, C)
+  scores = X.dot(W)
+  # correct_class_score: (N, 1)
+  correct_class_score = scores[np.arange(num_train), y].reshape(num_train, 1)
+  # margin: (N, C)
+  margin = np.maximum(0, scores - correct_class_score + 1)
+  # set loss for target class to 0, this is the "continue" part in loop code
+  margin[np.arange(num_train), y] = 0
+  # sum up loss and add regularization part
+  loss = np.sum(margin) / num_train
+  loss += reg * np.sum(W * W)
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
@@ -85,7 +104,17 @@ def svm_loss_vectorized(W, X, y, reg):
   # to reuse some of the intermediate values that you used to compute the     #
   # loss.                                                                     #
   #############################################################################
-  pass
+  # Prepare for misclassification examples in loss matrix
+  margin[margin > 0] = 1.0
+  # Set target class to negative gradients
+  row_sum = np.sum(margin, axis=1)
+  margin[np.arange(num_train), y] = -row_sum
+  # dW: (D, N) dot (N, C) = (D, C)
+  dW = X.T.dot(margin)
+  # Average gradients over examples.
+  dW /= num_train
+  # Add regularization graidents
+  dW += 2 * reg * W
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
