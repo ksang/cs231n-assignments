@@ -30,7 +30,25 @@ def softmax_loss_naive(W, X, y, reg):
   # here, it is easy to run into numeric instability. Don't forget the        #
   # regularization!                                                           #
   #############################################################################
-  pass
+  num_classes = W.shape[1]
+  num_train = X.shape[0]
+  for i in xrange(num_train):
+      # (1, D) dot (D, C) = (1, C)
+      scores = X[i].dot(W)
+      # Calculate softmax, stablized it by shifting max(score)
+      prob = np.exp(scores-np.max(scores))/np.sum(np.exp(scores-np.max(scores)))
+      # Look at the probability of true class, calculate loglikehood and add it to loss
+      loss += -np.log(prob[y[i]])
+      # Calculate gradients, for true class move it to opposite direction
+      for j in xrange(num_classes):
+          dW[:,j] += prob[j] * X[i].T
+      dW[:, y[i]] -= X[i].T
+
+  loss /= num_train
+  loss += reg * np.sum(W * W)
+  dW /= num_train
+  dW += 2 * reg * W
+
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################
@@ -54,10 +72,25 @@ def softmax_loss_vectorized(W, X, y, reg):
   # here, it is easy to run into numeric instability. Don't forget the        #
   # regularization!                                                           #
   #############################################################################
-  pass
+  num_classes = W.shape[1]
+  num_train = X.shape[0]
+  # (N, D) dot (D, C) = (N, C), stableize the softmax
+  scores = X.dot(W)
+  scores -= np.max(scores , axis=1).reshape(-1, 1)
+  # (N, C)
+  nprob = np.exp(scores)/np.sum(np.exp(scores), axis=-1, keepdims=True)
+  # sum over (N, 1)
+  loss = np.sum(-np.log(nprob[range(num_train), y]))
+  loss /= num_train
+  loss += reg * np.sum(W * W)
+  # Prepare to calculate gradient
+  nprob[np.arange(num_train), y] -= 1.0
+  # (C, N) dot (N, D) = (C, D)
+  dW = nprob.T.dot(X).T
+  dW /= num_train
+  dW += 2 * reg * W
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################
 
   return loss, dW
-
