@@ -83,7 +83,7 @@ def softmax_loss_vectorized(W, X, y, reg):
   loss = np.sum(-np.log(nprob[range(num_train), y]))
   loss /= num_train
   loss += reg * np.sum(W * W)
-  # Prepare to calculate gradient
+  # Prepare to calculate gradient, this is the gradient of softmax outputt
   nprob[np.arange(num_train), y] -= 1.0
   # (C, N) dot (N, D) = (C, D)
   dW = nprob.T.dot(X).T
