@@ -19,6 +19,11 @@ For original quiz, follow instructions from each assignment readme documentation
 
 In this assignment you will practice putting together a simple image classification pipeline, based on the k-Nearest Neighbor or the SVM/Softmax classifier.
 
-Assignment 2
+[Assignment 2](/assignment2)
 
-Assignment 3
+In this assignment you will practice writing backpropagation code, and training
+Neural Networks and Convolutional Neural Networks.
+
+[Assignment 3](/assignment3)
+
+In this assignment you will implement recurrent networks, and apply them to image captioning on Microsoft COCO. You will also explore methods for visualizing the features of a pretrained model on ImageNet, and also this model to implement Style Transfer. Finally, you will train a generative adversarial network to generate images that look like a training dataset!
