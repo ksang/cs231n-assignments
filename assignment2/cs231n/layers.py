@@ -176,7 +176,14 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         # variance, storing your result in the running_mean and running_var   #
         # variables.                                                          #
         #######################################################################
-        pass
+        mean = x.mean(axis=0)
+        var = x.var(axis=0) + eps
+        std = np.sqrt(var)
+        z = (x - mean) / std
+        out = gamma * z + beta
+        running_mean = momentum * running_mean + (1 - momentum) * mean
+        running_var = momentum * running_var + (1 - momentum) * (std**2)
+        cache = (x, mean, var, std, gamma, z)
         #######################################################################
         #                           END OF YOUR CODE                          #
         #######################################################################
@@ -187,7 +194,8 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         # then scale and shift the normalized data using gamma and beta.      #
         # Store the result in the out variable.                               #
         #######################################################################
-        pass
+        z = (x - running_mean) / np.sqrt(running_var + eps)
+        out = gamma * z + beta
         #######################################################################
         #                          END OF YOUR CODE                           #
         #######################################################################
@@ -223,7 +231,22 @@ def batchnorm_backward(dout, cache):
     # TODO: Implement the backward pass for batch normalization. Store the    #
     # results in the dx, dgamma, and dbeta variables.                         #
     ###########################################################################
-    pass
+    x, mean, var, std, gamma, z = cache
+    N = dout.shape[0]
+
+    dbeta = dout.sum(axis=0)
+    dgamma = np.sum(dout * z, axis=0)
+
+    dfdz = dout * gamma                                             #[NxD]
+    dudx = 1 / N                                                    #[NxD]
+    dvdx = 2 / N * (x - mean)                                       #[NxD]
+    dzdx = 1 / std                                                  #[NxD]
+    dzdu = -1 / std                                                 #[1xD]
+    dzdv = -0.5 * ( var**-1.5) * (x - mean)                         #[NxD]
+    dvdu = -2 / N * np.sum(x - mean, axis=0)                        #[1xD]
+
+    dx = dfdz * dzdx + np.sum(dfdz * dzdu, axis=0) * dudx + \
+         np.sum(dfdz * dzdv,axis=0) * (dvdx + dvdu * dudx)
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
@@ -253,7 +276,16 @@ def batchnorm_backward_alt(dout, cache):
     # should be able to compute gradients with respect to the inputs in a     #
     # single statement; our implementation fits on a single 80-character line.#
     ###########################################################################
-    pass
+    x, mean, var, std, gamma, z = cache
+    N = dout.shape[0]
+
+    dbeta = dout.sum(axis=0)
+    dgamma = np.sum(dout * z, axis=0)
+
+    dfdz = dout * gamma                                                 #[NxD]
+    dfdz_sum = np.sum(dfdz, axis=0)                                     #[1xD]
+    dx = dfdz - dfdz_sum / N - np.sum(dfdz * z,axis=0) * z / N          #[NxD]
+    dx /= std
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
