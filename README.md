@@ -5,7 +5,7 @@ Stanford CS231n: Convolutional Neural Networks for Visual Recognition assignment
 
 This project are assignment solutions and practices of Stanford class CS231n.
 
-The assignments are for 2017 years' version because video recordings are available on youtube.
+The assignments are for 2017 years' version because video recordings are available on [Youtube](https://www.youtube.com/playlist?list=PL3FW7Lu3i5JvHM8ljYj-zLfQRF3EO8sYv).
 
 For detailed information of the class, goto: [CS231n: Convolutional Neural Networks for Visual Recognition](http://vision.stanford.edu/teaching/cs231n/)
 
