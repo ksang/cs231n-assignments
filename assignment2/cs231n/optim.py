@@ -146,6 +146,7 @@ def adam(x, dx, config=None):
     config['t'] += 1
     mt = config['beta1'] * config['m'] + (1 - config['beta1']) * dx
     vt = config['beta2'] * config['v'] + (1 - config['beta2']) * dx * dx
+    # bias init status of mt and vt
     mb = mt / (1 - config['beta1'] ** config['t'])
     vb = vt / (1 - config['beta2'] ** config['t'])
     next_x = x - config['learning_rate'] * mb / (np.sqrt(vb) + config['epsilon'])
