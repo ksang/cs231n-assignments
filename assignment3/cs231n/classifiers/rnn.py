@@ -146,6 +146,8 @@ class CaptioningRNN(object):
         # Step 3, for each timestep, run recurrent network and get hidden states.
         if self.cell_type == 'rnn':
             h, cache = rnn_forward(caption_in_emb, h0, Wx, Wh, b)
+        elif self.cell_type == 'lstm':
+            h, cache = lstm_forward(caption_in_emb, h0, Wx, Wh, b)
         # Step 4, project final hidden state of RNN to scores in regarding vocabulary
         scores, scores_cache = temporal_affine_forward(h, W_vocab, b_vocab)
         # Step 5, calculate loss
@@ -155,6 +157,8 @@ class CaptioningRNN(object):
         dh, grads['W_vocab'], grads['b_vocab'] = temporal_affine_backward(dscores, scores_cache)
         if self.cell_type == 'rnn':
             dcaption_in_emb, dh0, grads['Wx'], grads['Wh'], grads['b'] = rnn_backward(dh, cache)
+        elif self.cell_type == 'lstm':
+            dcaption_in_emb, dh0, grads['Wx'], grads['Wh'], grads['b'] = lstm_backward(dh, cache)
         grads['W_embed'] = word_embedding_backward(dcaption_in_emb, caption_in_emb_cache)
         _, grads['W_proj'], grads['b_proj'] = affine_backward(dh0, affine_cache)
         ############################################################################
@@ -221,10 +225,13 @@ class CaptioningRNN(object):
         h, _ = affine_forward(features, W_proj, b_proj)
         start = (self._start * np.ones(N)).astype(np.int32)
         x = W_embed[start, :]
+        c = np.zeros_like(h)
 
         for t in range(max_length):
             if self.cell_type == 'rnn':
                 h, _ = rnn_step_forward(x, h, Wx, Wh, b)
+            elif self.cell_type == 'lstm':
+                h, c, _ = lstm_step_forward(x, h, c, Wx, Wh, b)
             scores = h.dot(W_vocab) + b_vocab
             # scores -> (N, V)
             captions[:, t] = np.argmax(scores, axis=1)
