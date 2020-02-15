@@ -3,17 +3,18 @@ Stanford CS231n: Convolutional Neural Networks for Visual Recognition assignment
 
 ### Overview
 
-This project are assignment solutions and practices of Stanford class CS231n.
+- This project are assignment solutions and practices of Stanford class CS231n.
 
-The assignments are for 2017 years' version because video recordings are available on [Youtube](https://www.youtube.com/playlist?list=PL3FW7Lu3i5JvHM8ljYj-zLfQRF3EO8sYv).
+- The assignments are for 2017 years' version because video recordings are available on [Youtube](https://www.youtube.com/playlist?list=PL3FW7Lu3i5JvHM8ljYj-zLfQRF3EO8sYv).
 
-For detailed information of the class, goto: [CS231n: Convolutional Neural Networks for Visual Recognition](http://vision.stanford.edu/teaching/cs231n/)
+- For detailed information of the class, goto: [CS231n: Convolutional Neural Networks for Visual Recognition](http://vision.stanford.edu/teaching/cs231n/)
+
+- Deep learning framework related assignments are finished with [PyTorch](https://pytorch.org/).
 
 ### Index
 
 - There are totally three collections of assignments, they are located in three directories.
 - The assignments are updated with my solutions (WIP).
-- Deep learning framework related assignments are finished with [PyTorch](https://pytorch.org/).
 - For original quiz, follow instructions from each assignment readme documentation.
 
 [Assignment 1](/assignment1)
