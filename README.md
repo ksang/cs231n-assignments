@@ -11,10 +11,10 @@ For detailed information of the class, goto: [CS231n: Convolutional Neural Netwo
 
 ### Index
 
-There are totally three collections of assignments, they are located in three directories.
-The assignments are updated with my solutions (WIP).
-Deep learning framework related assignments are finished with [PyTorch](https://pytorch.org/).
-For original quiz, follow instructions from each assignment readme documentation.
+- There are totally three collections of assignments, they are located in three directories.
+- The assignments are updated with my solutions (WIP).
+- Deep learning framework related assignments are finished with [PyTorch](https://pytorch.org/).
+- For original quiz, follow instructions from each assignment readme documentation.
 
 [Assignment 1](/assignment1)
 
