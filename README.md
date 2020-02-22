@@ -14,7 +14,7 @@ Stanford CS231n: Convolutional Neural Networks for Visual Recognition assignment
 ### Index
 
 - There are totally three collections of assignments, they are located in three directories.
-- The assignments are updated with my solutions (WIP).
+- The assignments are updated with my solutions.
 - For original quiz, follow instructions from each assignment readme documentation.
 
 [Assignment 1](/assignment1)
